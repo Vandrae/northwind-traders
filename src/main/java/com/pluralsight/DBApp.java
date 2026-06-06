@@ -32,6 +32,7 @@ public class DBApp {
                     DisplayAllProducts(connection);
                     break;
                 case "2":
+                    DisplayAllCustomers(connection);
                     break;
                 case "0":
                     break;
@@ -39,10 +40,6 @@ public class DBApp {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
-
-
-
 
     }
 
@@ -57,8 +54,8 @@ public class DBApp {
                     from
                         products
                     """;
-            PreparedStatement stmnt = connection.prepareStatement(sql);
-            ResultSet rs = stmnt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
                 int id = rs.getInt("ProductID");
@@ -71,11 +68,41 @@ public class DBApp {
                 System.out.println("# of Product in stock: " + stock);
                 System.out.println(" ");
             }
-
-
         }catch (SQLException e){
             e.printStackTrace();
         }
 
     }
+
+    public static void DisplayAllCustomers(Connection connection){
+        try{
+            String sql = """
+                Select
+                    CustomerID,
+                    CompanyName,
+                    ContactName,
+                    ContactTitle
+                From
+                    Customers
+                """;
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                String id = rs.getString("CustomerID");
+                String name = rs.getString("CompanyName");
+                String contact = rs.getString("ContactName");
+                String title = rs.getString("ContactTitle");
+                System.out.println("Customer ID: " + id);
+                System.out.println("Company Name: " + name);
+                System.out.println("Contact Name: " + contact);
+                System.out.println("Contact Title: " + title);
+                System.out.println(" ");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
 }
