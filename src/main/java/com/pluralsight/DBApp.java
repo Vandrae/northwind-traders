@@ -78,31 +78,35 @@ public class DBApp {
         try{
             String sql = """
                 Select
-                    CustomerID,
-                    CompanyName,
                     ContactName,
-                    ContactTitle
+                    CompanyName,
+                    City,
+                    Country,
+                    Phone
                 From
                     Customers
+                order by
+                    country
                 """;
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                String id = rs.getString("CustomerID");
-                String name = rs.getString("CompanyName");
                 String contact = rs.getString("ContactName");
-                String title = rs.getString("ContactTitle");
-                System.out.println("Customer ID: " + id);
+                String name = rs.getString("CompanyName");
+                String city = rs.getString("City");
+                String country = rs.getString("Country");
+                String phone = rs.getString("Phone");
+                System.out.println("Customer Name: " + contact);
                 System.out.println("Company Name: " + name);
-                System.out.println("Contact Name: " + contact);
-                System.out.println("Contact Title: " + title);
+                System.out.println("Customer City: " + city);
+                System.out.println("Customer Country: " + country);
+                System.out.println("Customer Phone Number: " + phone);
                 System.out.println(" ");
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-
     }
 
 }
