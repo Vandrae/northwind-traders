@@ -114,28 +114,54 @@ public class DBApp {
     }
 
     public static void DisplayAllCategories(Connection connection){
-        try{
-            String sql = """
+        Scanner input = new Scanner(System.in);
+        System.out.println("What category ID would you like to see?");
+
+        String sql = """
                 Select
-                    CategoryID,
-                    CategoryName
+                    ProductID,
+                    ProductName,
+                    UnitPrice,
+                    UnitsInStock
                 From
                     categories
+                    join products on categories.CategoryID = products.CategoryID
+                where
+                    products.CategoryID = ?
                 order by
-                    CategoryID
+                    products.CategoryID
                 """;
+        int catID = 0;
+        try{
+            catID = Integer.parseInt(input.nextLine());
+        }catch (NumberFormatException e){
+            System.out.println("enter a valid input");
+            return;
+        }
+
+        try{
+
             PreparedStatement stmt = connection.prepareStatement(sql);
+
+            //set string is saying im giving a string 1 is saying the first input "?" and assigning it to catID
+            // if there were multiple things being asked for ex(CategoryName = ? and CategoryPlace = ?)
+            // CategoryName would be (2, name) CategoryPlace would be  (3, place)
+            stmt.setInt(1, catID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                String id = rs.getString("CategoryID");
-                String name = rs.getString("CategoryName");
+                String id = rs.getString("ProductID");
+                String name = rs.getString("ProductName");
+                String price = rs.getString("UnitPrice");
+                String stock = rs.getString("UnitsInStock");
                 System.out.println("ID: " + id);
-                System.out.println("Category Name: " + name);
+                System.out.println("Product Name: " + name);
+                System.out.println("Product Price: " + price);
+                System.out.println("Number in Stock: " + stock);
                 System.out.println(" ");
             }
         }catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("No Category with the id of: " + catID);
         }
     }
 
